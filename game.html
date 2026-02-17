@@ -18,7 +18,7 @@
             </div>
         </ul>
         <div class="table">
-            <label for="data">Current status:</label>
+            <hr class="rounded" />
             <table id="dataTable">
                 <thead>
                     <tr>
@@ -29,28 +29,23 @@
                 <tbody>
                     <tr>
                         <td>Anna</td>
-                        <td class="status">Alive</td>
+                        <td class="status alive">Alive</td>
                     </tr>
                     <tr>
                         <td>Bea</td>
-                        <td class="status">Alive</td>
+                        <td class="status alive">Alive</td>
                     </tr>
                     <tr>
                         <td>Cili</td>
-                        <td class="status">Alive</td>
+                        <td class="status dead">Dead</td>
                     </tr>
                 </tbody>
             </table>
+            <hr class="rounded" />
         </div>
-
-        <div>
-            <p>
-                <strong>Target:</strong>
-                <span id="targetName">Anna</span>
-            </p>
-        </div>
-
-        <div>
+        <div class="target">
+            <strong class="target-pretext">Your target is:</strong>
+            <div id="targetName">Anna</div>
             <button id="killbutton">Kill</button>
         </div>
     </body>
