@@ -3,7 +3,9 @@ h1,
 h2,
 h3,
 p,
-div {
+div,
+ul,
+li {
     margin: 0px;
     padding: 0px;
 }
@@ -84,9 +86,6 @@ ul.horizontal {
     display: flex;
     justify-content: space-between;
     list-style-type: none;
-
-    margin: 0;
-    padding: 0;
     overflow: hidden;
     background-color: #333;
 }
@@ -100,6 +99,7 @@ ul.horizontal li a.active {
     background-color: #04aa6d;
 }
 ul.horizontal li a {
+    height: 100%;
     display: block;
     color: white;
     text-align: center;
@@ -217,4 +217,34 @@ div.description {
         border-radius: 1em;
         padding: 1em;
     }
+}
+
+.game-card {
+    border: solid;
+    border-radius: 1em;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.ongoing-games,
+.joinable-games {
+    display: flex;
+    gap: 1em;
+    padding: 1em;
+    justify-content: center;
+    > * {
+        flex: 1;
+    }
+}
+
+button.leave {
+    background-color: #f44336;
+}
+
+.games-header {
+    text-align: center;
+    font-size: 1.5em;
+    padding: 1em;
 }
