@@ -1,6 +1,11 @@
-body {
-    margin: 0;
-    padding: 0;
+body,
+h1,
+h2,
+h3,
+p,
+div {
+    margin: 0px;
+    padding: 0px;
 }
 
 form {
@@ -166,4 +171,50 @@ button#killbutton {
     font-size: 1.5em;
     height: 4em;
     border-radius: 1em;
+}
+
+.about {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 3em;
+}
+
+.about-mark,
+.about-marci {
+    max-width: 75vw;
+    border: solid;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* gap: 0.5rem; */
+    padding: 2em;
+    > * {
+        margin: 0.5em;
+    }
+}
+
+img.about-image {
+    height: 25vh;
+    width: auto;
+}
+
+p.about-devs {
+    margin: 2rem;
+    font-size: 3em;
+    text-align: center;
+}
+
+div.description {
+    margin: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    > p.description {
+        border: solid;
+        border-radius: 1em;
+        padding: 1em;
+    }
 }
