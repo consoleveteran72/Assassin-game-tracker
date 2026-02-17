@@ -1,28 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <form action="action_page.php" method="post">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <ul class="horizontal">
+            <div class="left">
+                <li><a href="page.html">Active Game</a></li>
+                <li><a class="active" href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </div>
+            <div class="right">
+                <li><a href="about.html">About</a></li>
+            </div>
+        </ul>
+        <form action="action_page.php" method="post">
+            <div class="container">
+                <label for="uname"><b>Username</b></label>
+                <input
+                    type="text"
+                    placeholder="Enter Username"
+                    name="uname"
+                    required
+                />
 
-  <div class="container">
-    <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required>
+                <label for="psw"><b>Password</b></label>
+                <input
+                    type="password"
+                    placeholder="Enter Password"
+                    name="psw"
+                    required
+                />
 
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
+                <button type="submit">Login</button>
+            </div>
 
-    <button type="submit">Login</button>
-  </div>
-
-  <div class="container" style="background-color:#f1f1f1">
-    <button type="button" class="cancelbtn">Cancel</button>
-    <a href="register.html"><button type="button" class="Regbtn">Register</button></a>
-  </div>
-</form> 
-</body>
+            <div class="container" style="background-color: #f1f1f1">
+                <button type="button" class="cancelbtn">Cancel</button>
+                <a href="register.html"
+                    ><button type="button" class="Regbtn">Register</button></a
+                >
+            </div>
+        </form>
+    </body>
 </html>

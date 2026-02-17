@@ -1,49 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="table">
-        <label for="data">Current status:</label>
-        <table id="dataTable">
-            <thead>
-                <tr>
-                <th>Name</th>
-                <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <td>Anna</td>
-                <td class="status">Alive</td>
-                </tr>
-                <tr>
-                <td>Bea</td>
-                <td class="status">Alive</td>
-                </tr>
-                <tr>
-                <td>Cili</td>
-                <td class="status">Alive</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Page</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <ul class="horizontal">
+            <div class="left">
+                <li><a class="active" href="page.html">Active Game</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </div>
+            <div class="right">
+                <li><a href="about.html">About</a></li>
+            </div>
+        </ul>
+        <div class="table">
+            <label for="data">Current status:</label>
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Anna</td>
+                        <td class="status">Alive</td>
+                    </tr>
+                    <tr>
+                        <td>Bea</td>
+                        <td class="status">Alive</td>
+                    </tr>
+                    <tr>
+                        <td>Cili</td>
+                        <td class="status">Alive</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <div>
-        <p>
-            <strong>Target:</strong>
-            <span id="targetName">Anna</span>
-        </p>
-    </div>
+        <div>
+            <p>
+                <strong>Target:</strong>
+                <span id="targetName">Anna</span>
+            </p>
+        </div>
 
-    <div>
-        <button id="killbutton">Kill</button>
-    </div>
-
-
-</body>
+        <div>
+            <button id="killbutton">Kill</button>
+        </div>
+    </body>
 </html>
+
