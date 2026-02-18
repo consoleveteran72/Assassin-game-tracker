@@ -200,7 +200,8 @@ img.about-image {
     width: auto;
 }
 
-p.about-devs {
+p.about-devs,
+p.header {
     margin: 2rem;
     font-size: 3em;
     text-align: center;
@@ -247,4 +248,38 @@ button.leave {
     text-align: center;
     font-size: 1.5em;
     padding: 1em;
+}
+
+.profile {
+    max-height: 60vh;
+    margin: 5em 2em;
+    display: flex;
+    gap: 5em;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.player {
+    flex: 3 1 auto;
+}
+
+.profile-name {
+    text-align: center;
+    font-size: 3em;
+    margin-bottom: 4rem;
+}
+
+img.profile-picture {
+    flex: 1 1 auto;
+    border: solid;
+    padding: 0.5em;
+    border-radius: 1em;
+}
+
+.player-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1em;
 }
