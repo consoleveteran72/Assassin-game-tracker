@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Assassin Game - Profile</title>
+</head>
+<body>
+  <ul class="horizontal">
+    <div class="left">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="game.html">Active Game</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="register.html">Register</a></li>
+    </div>
+    <div class="right">
+      <li><a class="active" href="profile.html">Profile</a></li>
+      <li><a href="about.html">About</a></li>
+    </div>
+  </ul>
+
+  <p class="header">Your Profile</p>
+
+  <div class="profile">
+    <img id="profile-picture" src="" alt="profile picture" class="profile-picture" />
+    <div class="player">
+      <p class="profile-name" id="profile-name"></p>
+      <div class="player-data">
+        <p>Games Played: <span id="games-played"></span></p>
+        <hr class="rounded" />
+        <p>Games Won: <span id="games-won"></span></p>
+        <hr class="rounded" />
+        <p>Kill Count: <span id="kills"></span></p>
+        <hr class="rounded" />
+        <p>Currently active games: J64K</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadProfile() {
+      const res = await fetch('/profile-data');
+
+      if (!res.ok) {
+        window.location.href = '/login.html'; // not logged in
+        return;
+      }
+
+      const user = await res.json();
+
+      document.getElementById('profile-picture').src = user.profile_picture_path;
+      document.getElementById('profile-name').textContent = user.username;
+      document.getElementById('games-played').textContent = user.games_played;
+      document.getElementById('games-won').textContent = user.games_won;
+      document.getElementById('kills').textContent = user.kills;
+    }
+
+    loadProfile();
+  </script>
+
+  <button onclick="toggleEdit()">Edit Profile</button>
+
+
+
+
+
+
+</body>
+</html>
