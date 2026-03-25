@@ -105,5 +105,55 @@ app.get('/profile-data', (req, res) => {
   res.json(req.session.user);
 });
 
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: 'public/pictures/',
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const upload = multer({ storage });
+
+
+app.post('/profile/edit', upload.single('picture'), async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: 'Not logged in' });
+  }
+
+  const userId = req.session.user.id;
+  const newUsername = req.body.username || req.session.user.username;
+  // const password = req.body.password;
+  const newPicturePath = req.file
+    ? '/pictures/' + req.file.filename  
+    : req.session.user.profile_picture_path;
+
+  try {
+    const userResult = await pool.query(
+      'SELECT * FROM users WHERE username = $1',
+      [req.session.user.username]
+    );
+
+    const user = userResult.rows[0];
+
+    /* if (user.password !== password) {
+      return res.status(401).json({ error: 'Wrong password' });
+    } */
+
+    await pool.query(
+      'UPDATE users SET username = $1, profile_picture_path = $2 WHERE username = $3',
+      [newUsername, newPicturePath, req.session.user.username])
+
+
+    req.session.user.username = newUsername;
+    req.session.user.profile_picture_path = newPicturePath;
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
 
 app.listen(3000, () => console.log('Server running on port 3000'));

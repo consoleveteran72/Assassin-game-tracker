@@ -38,6 +38,33 @@
     </div>
   </div>
 
+
+  <button onclick="toggleModal()">Edit Profile</button>
+
+  <div id="modal-overlay">
+
+  <div id="modal-content">
+      <h2>Edit Profile</h2>
+      
+
+      <label>Current Password</label>
+      <input type="password" id="current-password" placeholder="Enter your password" style="width:100%; margin-bottom:15px;" />
+      
+      <label>Username</label>
+      <input type="text" id="edit-username" placeholder="New username" style="width:100%; margin-bottom:15px;" />
+      
+       <label>Profile Picture</label>
+       <input type="file" id="edit-picture" accept="image/*" style="width:100%; margin-bottom:15px;" />
+       
+      <div>
+        <button onclick="toggleModal()">Cancel</button>
+        <button onclick="saveProfile()">Save</button>
+      </div>
+    </div>
+  </div>
+
+
+
   <script>
     async function loadProfile() {
       const res = await fetch('/profile-data');
@@ -57,9 +84,55 @@
     }
 
     loadProfile();
-  </script>
 
-  <button onclick="toggleEdit()">Edit Profile</button>
+
+  function toggleModal() {
+  const modal = document.getElementById('modal-overlay');
+  const isHidden = modal.style.display === 'none';
+
+  if (isHidden) {
+    document.getElementById('edit-username').value =
+      document.getElementById('profile-name').textContent;
+  }
+
+  modal.style.display = isHidden ? 'block' : 'none';
+}
+
+
+  document.getElementById('modal-overlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('modal-overlay')) {
+      toggleModal();
+    }
+  });
+
+  async function saveProfile() {
+    const username = document.getElementById('edit-username').value;
+    const pictureFile = document.getElementById('edit-picture').files[0];
+    
+    const formData = new FormData();
+    if (username) formData.append('username', username);
+    if (pictureFile) formData.append('picture', pictureFile);
+    
+    const res = await fetch('/profile/edit', {
+      method: 'POST',
+      body: formData,
+    });
+  
+  const result = await res.json();
+  
+  if (result.success) {
+    loadProfile();
+    toggleModal();  
+  } else {
+    alert(result.error);
+  }
+}
+
+</script>
+
+
+
+
 
 
 
