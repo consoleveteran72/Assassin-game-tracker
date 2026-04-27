@@ -190,8 +190,9 @@ app.get("/partial/games/active-details/:id", isAuthenticated, async (req, res) =
     
     // Join users with participants to get names + statuses
     const playerRes = await pool.query(`
-        SELECT gp.*, u.username, 
-        (SELECT username FROM users WHERE id = gp.target_id) as target_username
+        SELECT gp.*, u.username, u.profile_picture_path,
+        (SELECT username FROM users WHERE id = gp.target_id) as target_username,
+        (SELECT profile_picture_path FROM users WHERE id = gp.target_id) as target_pfp
         FROM game_participants gp 
         JOIN users u ON gp.user_id = u.id 
         WHERE gp.game_id = $1
@@ -206,11 +207,15 @@ app.get("/partial/games/active-details/:id", isAuthenticated, async (req, res) =
             <div class="my-status">
                 <p>Your Status: <strong>${me.is_alive ? 'ALIVE' : 'DEAD'}</strong></p>
                 ${me.is_alive && game.status === 'active' ? `
-                    <p>Target: <span class="target-name">${me.target_username}</span></p>
-                    <button hx-post="/games/kill" hx-vals='{"game_id": ${gameId}}' hx-target="#game-container">Kill Target</button>
+                    <p>Target:</p>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin: 1rem 0;">
+                        <img src="${me.target_pfp}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; border: 3px solid var(--danger);">
+                        <span class="target-name" style="margin: 0;">${me.target_username}</span>
+                    </div>
+                    <button hx-post="/games/kill" hx-vals='{"game_id": ${gameId}}' hx-target="#game-container" style="margin-bottom: 10px;">Kill Target</button>
                 ` : ''}
                 ${game.status === 'lobby' && game.host_id === userId ? `
-                    <button hx-post="/games/start" hx-vals='{"game_id": ${gameId}}' hx-target="#game-container">Start Game</button>
+                    <button hx-post="/games/start" hx-vals='{"game_id": ${gameId}}' hx-target="#game-container" style="margin-bottom: 10px;">Start Game</button>
                 ` : ''}
                 <button hx-post="/games/leave" hx-vals='{"game_id": ${gameId}}' hx-target="#game-container">Leave Game</button>
             </div>
@@ -218,7 +223,14 @@ app.get("/partial/games/active-details/:id", isAuthenticated, async (req, res) =
             <ul class="player-list">
     `;
     for (const p of playerRes.rows) {
-        html += `<li>${p.username} - ${p.is_alive ? 'Alive' : 'Dead'}</li>`;
+        html += `
+            <li>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img src="${p.profile_picture_path}" style="width:30px; height:30px; border-radius:50%; object-fit:cover;">
+                    <span>${p.username}</span>
+                </div>
+                <span>${p.is_alive ? 'Alive' : 'Dead'}</span>
+            </li>`;
     }
     html += `</ul></div>`;
     res.send(html);
@@ -443,6 +455,28 @@ app.post("/profile/edit", isAuthenticated, upload.single("picture"), async (req,
         await pool.query("UPDATE users SET username = $1, profile_picture_path = $2 WHERE id = $3", [newUsername, newPicturePath, req.session.user.id]);
         req.session.user.username = newUsername;
         req.session.user.profile_picture_path = newPicturePath;
+        res.json({ success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Database error" });
+    }
+});
+
+/**
+ * Change Password.
+ * 1. Verifies old password.
+ * 2. Hashes and updates new password.
+ */
+app.post("/profile/change-password", isAuthenticated, async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    try {
+        const result = await pool.query("SELECT password FROM users WHERE id = $1", [req.session.user.id]);
+        const user = result.rows[0];
+        const match = await bcrypt.compare(oldPassword, user.password);
+        if (!match) return res.status(401).json({ error: "Incorrect old password" });
+
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+        await pool.query("UPDATE users SET password = $1 WHERE id = $2", [hashedPassword, req.session.user.id]);
         res.json({ success: true });
     } catch (err) {
         console.error(err);

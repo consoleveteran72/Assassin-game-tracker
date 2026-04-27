@@ -24,7 +24,7 @@
         <div class="container">
             <h2>Your Profile</h2>
             <div id="profileDisplay">
-                <img id="profilePic" src="" alt="Profile Picture" style="width: 100px; border-radius: 50%;" />
+                <img id="profilePic" src="" alt="Profile Picture" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;" />
                 <h3 id="profileUsername"></h3>
                 <p>Games Played: <span id="gamesPlayed"></span></p>
                 <p>Games Won: <span id="gamesWon"></span></p>
@@ -38,6 +38,15 @@
                 <input type="text" name="username" placeholder="New Username" />
                 <input type="file" name="picture" accept="image/*" />
                 <button type="submit">Update Profile</button>
+            </form>
+
+            <hr />
+
+            <h3>Change Password</h3>
+            <form id="changePasswordForm">
+                <input type="password" name="oldPassword" placeholder="Old Password" required />
+                <input type="password" name="newPassword" placeholder="New Password" required />
+                <button type="submit">Change Password</button>
             </form>
         </div>
 
@@ -68,6 +77,24 @@
                 if (result.success) {
                     loadProfile();
                     alert("Profile updated!");
+                } else {
+                    alert(result.error);
+                }
+            };
+
+            document.getElementById('changePasswordForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                const res = await fetch('/profile/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    e.target.reset();
+                    alert("Password changed!");
                 } else {
                     alert(result.error);
                 }
