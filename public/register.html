@@ -3,51 +3,52 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Assassin Game - Register</title>
         <link rel="stylesheet" href="style.css" />
+        <title>Assassin Game - Register</title>
     </head>
     <body>
         <ul class="horizontal">
             <div class="left">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="game.html">Active Game</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a class="active" href="register.html">Register</a></li>
+                <li class="guest-only"><a href="login.html">Login</a></li>
+                <li class="guest-only"><a class="active" href="register.html">Register</a></li>
+                <li class="user-only"><a href="game.html">Active Game</a></li>
             </div>
             <div class="right">
                 <li><a href="profile.html">Profile</a></li>
                 <li><a href="about.html">About</a></li>
+                <li class="user-only"><button class="nav-logout" onclick="logout()">Logout</button></li>
             </div>
         </ul>
-        <form action="/register" method="post">
-            <div class="container">
-                <label for="uname"><b>Username</b></label>
-                <input
-                    type="text"
-                    placeholder="Enter Username"
-                    name="username"
-                    required
-                />
 
-                <label for="psw"><b>Password</b></label>
-                <input
-                    type="password"
-                    placeholder="Enter Password"
-                    name="password"
-                    required
-                />
-
+        <div class="container">
+            <h2>Register</h2>
+            <form id="registerForm">
+                <input type="text" name="username" placeholder="Username" required />
+                <input type="password" name="password" placeholder="Password" required />
                 <button type="submit">Register</button>
-            </div>
+            </form>
+            <p id="error" style="color: red;"></p>
+        </div>
 
-            <div class="container" style="background-color: #f1f1f1">
-                <a href="game.html">
-                    <button type="button" class="cancelbtn">Cancel</button>
-                </a>
-                <a href="login.html"
-                    ><button type="button" class="Logbtn">Login</button></a
-                >
-            </div>
-        </form>
+        <script src="nav.js"></script>
+        <script>
+            document.getElementById('registerForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                const res = await fetch('/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    window.location.href = '/index.html';
+                } else {
+                    document.getElementById('error').innerText = result.error;
+                }
+            };
+        </script>
     </body>
 </html>

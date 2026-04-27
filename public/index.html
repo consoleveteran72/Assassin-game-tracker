@@ -4,66 +4,53 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="style.css" />
+        <script src="htmx.min.js"></script>
         <title>Assassin Game - Home</title>
     </head>
-    <ul class="horizontal">
-        <div class="left">
-            <li><a class="active" href="index.html">Home</a></li>
-            <li><a href="game.html">Active Game</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="register.html">Register</a></li>
+    <body>
+        <ul class="horizontal">
+            <div class="left">
+                <li><a class="active" href="index.html">Home</a></li>
+                <li class="guest-only"><a href="login.html">Login</a></li>
+                <li class="guest-only"><a href="register.html">Register</a></li>
+                <li class="user-only"><a href="game.html">Active Game</a></li>
+            </div>
+            <div class="right">
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="about.html">About</a></li>
+                <li class="user-only"><button class="nav-logout" onclick="logout()">Logout</button></li>
+            </div>
+        </ul>
+
+        <div class="container">
+            <section class="user-only">
+                <h2>Create Game</h2>
+                <form hx-post="/games/create" hx-target="#ongoing-games" hx-on::after-request="this.reset()">
+                    <label>Public: <input type="checkbox" name="is_public" value="true" checked></label>
+                    <label>Player Limit: <input type="number" name="player_limit" placeholder="Unlimited"></label>
+                    <button type="submit">Create</button>
+                </form>
+            </section>
+
+            <section class="user-only">
+                <h2>Join Private Game</h2>
+                <form hx-post="/games/join" hx-target="#ongoing-games" hx-on::after-request="this.reset()">
+                    <input type="text" name="invite_code" placeholder="Enter Code" required>
+                    <button type="submit">Join</button>
+                </form>
+            </section>
+
+            <div class="games-header">Ongoing Games:</div>
+            <div id="ongoing-games" class="user-only" hx-get="/partial/games/ongoing-simple" hx-trigger="load, every 5s">
+                Loading...
+            </div>
+
+            <div class="games-header">Joinable Public Games:</div>
+            <div id="joinable-games" hx-get="/partial/games/joinable" hx-trigger="load, every 10s">
+                Loading...
+            </div>
         </div>
-        <div class="right">
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="about.html">About</a></li>
-        </div>
-    </ul>
-    <div class="games-header">Ongoing Games:</div>
-    <div class="ongoing-games">
-        <div class="game-card">
-            <div class="code">Game code: J64K</div>
-            <div class="player-count">Players: 3</div>
-            <div class="your-status">Your status: Alive</div>
-            <button type="button" class="goto">Check</button>
-            <button type="button" class="leave">Leave</button>
-        </div>
-        <div class="game-card">
-            <div class="code">Game code: J64K</div>
-            <div class="player-count">Players: 3</div>
-            <div class="your-status">Your status: Alive</div>
-            <button type="button" class="goto">Check</button>
-            <button type="button" class="leave">Leave</button>
-        </div>
-        <div class="game-card">
-            <div class="code">Game code: J64K</div>
-            <div class="player-count">Players: 3</div>
-            <div class="your-status">Your status: Alive</div>
-            <button type="button" class="goto">Check</button>
-            <button type="button" class="leave">Leave</button>
-        </div>
-    </div>
-    <div class="games-header">Joinable Games:</div>
-    <div class="joinable-games">
-        <div class="game-card">
-            <div class="code">Game code: J64K</div>
-            <div class="player-count">Players: 3</div>
-            <button type="button" class="join">Join</button>
-        </div>
-        <div class="game-card">
-            <div class="code">Game code: J64K</div>
-            <div class="player-count">Players: 3</div>
-            <button type="button" class="join">Join</button>
-        </div>
-        <div class="game-card">
-            <div class="code">Game code: J64K</div>
-            <div class="player-count">Players: 3</div>
-            <button type="button" class="join">Join</button>
-        </div>
-        <div class="game-card">
-            <div class="code">Game code: J64K</div>
-            <div class="player-count">Players: 3</div>
-            <button type="button" class="join">Join</button>
-        </div>
-    </div>
-    <body></body>
+
+        <script src="nav.js"></script>
+    </body>
 </html>

@@ -3,52 +3,43 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Assassin Game - Ongoing</title>
         <link rel="stylesheet" href="style.css" />
+        <script src="htmx.min.js"></script>
+        <title>Assassin Game - Active Game</title>
     </head>
     <body>
         <ul class="horizontal">
             <div class="left">
                 <li><a href="index.html">Home</a></li>
-                <li><a class="active" href="game.html">Active Game</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
+                <li class="guest-only"><a href="login.html">Login</a></li>
+                <li class="guest-only"><a href="register.html">Register</a></li>
+                <li class="user-only"><a class="active" href="game.html">Active Game</a></li>
             </div>
             <div class="right">
                 <li><a href="profile.html">Profile</a></li>
                 <li><a href="about.html">About</a></li>
+                <li class="user-only"><button class="nav-logout" onclick="logout()">Logout</button></li>
             </div>
         </ul>
-        <div class="table">
-            <hr class="rounded" />
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Anna</td>
-                        <td class="status alive">Alive</td>
-                    </tr>
-                    <tr>
-                        <td>Bea</td>
-                        <td class="status alive">Alive</td>
-                    </tr>
-                    <tr>
-                        <td>Cili</td>
-                        <td class="status dead">Dead</td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr class="rounded" />
+
+        <div class="container">
+            <div id="game-container">
+                <p>Select a game from the Home tab to view details.</p>
+            </div>
         </div>
-        <div class="target">
-            <strong class="target-pretext">Your target is:</strong>
-            <div id="targetName">Anna</div>
-            <button id="killbutton">Kill</button>
-        </div>
+
+        <script src="nav.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const params = new URLSearchParams(window.location.search);
+                const gameId = params.get('id');
+                if (gameId) {
+                    const container = document.getElementById('game-container');
+                    container.setAttribute('hx-get', `/partial/games/active-details/${gameId}`);
+                    container.setAttribute('hx-trigger', 'load, every 5s');
+                    htmx.process(container);
+                }
+            });
+        </script>
     </body>
 </html>

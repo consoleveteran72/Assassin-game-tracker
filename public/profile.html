@@ -1,143 +1,79 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-  <title>Assassin Game - Profile</title>
-</head>
-<body>
-  <ul class="horizontal">
-    <div class="left">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="game.html">Active Game</a></li>
-      <li><a href="login.html">Login</a></li>
-      <li><a href="register.html">Register</a></li>
-    </div>
-    <div class="right">
-      <li><a class="active" href="profile.html">Profile</a></li>
-      <li><a href="about.html">About</a></li>
-    </div>
-  </ul>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <title>Assassin Game - Profile</title>
+    </head>
+    <body>
+        <ul class="horizontal">
+            <div class="left">
+                <li><a href="index.html">Home</a></li>
+                <li class="guest-only"><a href="login.html">Login</a></li>
+                <li class="guest-only"><a href="register.html">Register</a></li>
+                <li class="user-only"><a href="game.html">Active Game</a></li>
+            </div>
+            <div class="right">
+                <li><a class="active" href="profile.html">Profile</a></li>
+                <li><a href="about.html">About</a></li>
+                <li class="user-only"><button class="nav-logout" onclick="logout()">Logout</button></li>
+            </div>
+        </ul>
 
-  <p class="header">Your Profile</p>
+        <div class="container">
+            <h2>Your Profile</h2>
+            <div id="profileDisplay">
+                <img id="profilePic" src="" alt="Profile Picture" style="width: 100px; border-radius: 50%;" />
+                <h3 id="profileUsername"></h3>
+                <p>Games Played: <span id="gamesPlayed"></span></p>
+                <p>Games Won: <span id="gamesWon"></span></p>
+                <p>Kills: <span id="kills"></span></p>
+            </div>
 
-  <div class="profile">
-    <img id="profile-picture" src="" alt="profile picture" class="profile-picture" />
-    <div class="player">
-      <p class="profile-name" id="profile-name"></p>
-      <div class="player-data">
-        <p>Games Played: <span id="games-played"></span></p>
-        <hr class="rounded" />
-        <p>Games Won: <span id="games-won"></span></p>
-        <hr class="rounded" />
-        <p>Kill Count: <span id="kills"></span></p>
-        <hr class="rounded" />
-        <p>Currently active games: J64K</p>
-      </div>
-    </div>
-  </div>
+            <hr />
 
+            <h3>Edit Profile</h3>
+            <form id="editProfileForm">
+                <input type="text" name="username" placeholder="New Username" />
+                <input type="file" name="picture" accept="image/*" />
+                <button type="submit">Update Profile</button>
+            </form>
+        </div>
 
-  <button onclick="toggleModal()">Edit Profile</button>
+        <script src="nav.js"></script>
+        <script>
+            async function loadProfile() {
+                const res = await fetch('/profile-data');
+                if (res.status === 401) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                const data = await res.json();
+                document.getElementById('profilePic').src = data.profile_picture_path;
+                document.getElementById('profileUsername').innerText = data.username;
+                document.getElementById('gamesPlayed').innerText = data.games_played;
+                document.getElementById('gamesWon').innerText = data.games_won;
+                document.getElementById('kills').innerText = data.kills;
+            }
 
-  <div id="modal-overlay">
+            document.getElementById('editProfileForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const res = await fetch('/profile/edit', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await res.json();
+                if (result.success) {
+                    loadProfile();
+                    alert("Profile updated!");
+                } else {
+                    alert(result.error);
+                }
+            };
 
-  <div id="modal-content">
-      <h2>Edit Profile</h2>
-      
-
-      <label>Current Password</label>
-      <input type="password" id="current-password" placeholder="Enter your password" style="width:100%; margin-bottom:15px;" />
-      
-      <label>Username</label>
-      <input type="text" id="edit-username" placeholder="New username" style="width:100%; margin-bottom:15px;" />
-      
-       <label>Profile Picture</label>
-       <input type="file" id="edit-picture" accept="image/*" style="width:100%; margin-bottom:15px;" />
-       
-      <div>
-        <button onclick="toggleModal()">Cancel</button>
-        <button onclick="saveProfile()">Save</button>
-      </div>
-    </div>
-  </div>
-
-
-
-  <script>
-    async function loadProfile() {
-      const res = await fetch('/profile-data');
-
-      if (!res.ok) {
-        window.location.href = '/login.html'; // not logged in
-        return;
-      }
-
-      const user = await res.json();
-
-      document.getElementById('profile-picture').src = user.profile_picture_path;
-      document.getElementById('profile-name').textContent = user.username;
-      document.getElementById('games-played').textContent = user.games_played;
-      document.getElementById('games-won').textContent = user.games_won;
-      document.getElementById('kills').textContent = user.kills;
-    }
-
-    loadProfile();
-
-
-  function toggleModal() {
-  const modal = document.getElementById('modal-overlay');
-  const isHidden = modal.style.display === 'none';
-
-  if (isHidden) {
-    document.getElementById('edit-username').value =
-      document.getElementById('profile-name').textContent;
-  }
-
-  modal.style.display = isHidden ? 'block' : 'none';
-}
-
-
-  document.getElementById('modal-overlay').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('modal-overlay')) {
-      toggleModal();
-    }
-  });
-
-  async function saveProfile() {
-    const username = document.getElementById('edit-username').value;
-    const pictureFile = document.getElementById('edit-picture').files[0];
-    
-    const formData = new FormData();
-    if (username) formData.append('username', username);
-    if (pictureFile) formData.append('picture', pictureFile);
-    
-    const res = await fetch('/profile/edit', {
-      method: 'POST',
-      body: formData,
-    });
-  
-  const result = await res.json();
-  
-  if (result.success) {
-    loadProfile();
-    toggleModal();  
-  } else {
-    alert(result.error);
-  }
-}
-
-</script>
-
-
-
-
-
-
-
-
-
-
-</body>
+            loadProfile();
+        </script>
+    </body>
 </html>

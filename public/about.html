@@ -10,37 +10,22 @@
         <ul class="horizontal">
             <div class="left">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="game.html">Active Game</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
+                <li class="guest-only"><a href="login.html">Login</a></li>
+                <li class="guest-only"><a href="register.html">Register</a></li>
+                <li class="user-only"><a href="game.html">Active Game</a></li>
             </div>
             <div class="right">
                 <li><a href="profile.html">Profile</a></li>
                 <li><a class="active" href="about.html">About</a></li>
+                <li class="user-only"><button class="nav-logout" onclick="logout()">Logout</button></li>
             </div>
         </ul>
-        <p class="about-devs">A fejlesztők</p>
-        <div class="about">
-            <div class="about-mark">
-                <img src="pictures/mark.jpg" alt="" class="about-image" />
-                <p>Nesovanovic Mark</p>
-                <p>mark.nesovanovic@gmail.com</p>
-                <a href="https://github.com/MarkusIfquil">Github</a>
-            </div>
-            <div class="about-marci">
-                <img src="pictures/marci.jpg" alt="" class="about-image" />
-                <p>Balint Marton</p>
-                <p>consoleveteran72@gmail.com</p>
-                <a href="https://github.com/consoleveteran72">Github</a>
-            </div>
+
+        <div class="container">
+            <h2>About Assassin Game</h2>
+            <p>IRL game tracker. Stay alive. Kill targets. Win.</p>
         </div>
-        <div class="description">
-            <p class="description">
-                A Bolyai BTGK Webprogramozás órára készített projekt.
-                <br />
-                Az aszaszinos játék egy kis tradíció a Bolyaiban, ezért
-                készítettünk egy felületet, ahonnan könnyen vezethető a játék.
-            </p>
-        </div>
+
+        <script src="nav.js"></script>
     </body>
 </html>
