@@ -52,5 +52,17 @@
         </div>
 
         <script src="nav.js"></script>
+        <script>
+            async function checklogin(){
+
+                const res = await fetch('/profile-data');
+                if (res.status === 401) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+            }
+            checklogin();
+        </script>
     </body>
 </html>
