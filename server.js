@@ -21,11 +21,8 @@ const app = express();
  * Manages multiple persistent connections to the database for efficiency.
  */
 const pool = new Pool({
-    host: "localhost",
-    user: "postgres",
-    password: "nemtudom",
-    database: "Assassin-game",
-    port: 5432,
+    connectionString: process.env.DATABASE_URL || "postgres://postgres:nemtudom@localhost:5432/Assassin-game",
+    ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
 
 /**
@@ -35,7 +32,7 @@ const pool = new Pool({
  */
 app.use(
     session({
-        secret: "hahgjkfdh",
+        secret: process.env.SESSION_SECRET || "hahgjkfdh",
         resave: false,
         saveUninitialized: false,
         cookie: { maxAge: 1000 * 60 * 60 }, // 1 hour session lifetime
@@ -484,4 +481,5 @@ app.post("/profile/change-password", isAuthenticated, async (req, res) => {
     }
 });
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
