@@ -267,6 +267,20 @@ button[hx-post*="leave"]:hover {
     /* display set by script */
 }
 
+/* About Page */
+.about-page {
+    text-align: center;
+}
+
+.about-page img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border: 3px solid black;
+    margin: 1rem auto;
+    display: block;
+}
+
 hr {
     margin: 2rem 0;
     border: 0;
